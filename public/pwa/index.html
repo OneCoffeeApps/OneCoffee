@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="apple-mobile-web-app-title" content="OneCoffee">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OneCoffee Control</title>
+    <title>OneCoffee</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="/manifest.json">
@@ -25,12 +26,12 @@
 </head>
 <body>
     <select class="lang-select" onchange="changeLang(this.value)">
-        <option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option>
-        <option value="fr">FR</option><option value="ru">RU</option><option value="zh">ZH</option>
+        <option value="en">English</option><option value="es">Español</option><option value="pt">Português</option>
+        <option value="fr">Français</option><option value="ru">Русский</option><option value="zh">中文</option>
     </select>
 
     <div id="install-screen" class="card hidden">
-        <div class="icon">☕️</div>
+        <img src="icon.png" style="width: 120px; border-radius: 26px; margin: 0 auto 20px auto; display: block; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
         <h2 id="i-h2">Install OneCoffee</h2>
         <p id="i-p">Tap Share and select 'Add to Home Screen'.</p>
     </div>
