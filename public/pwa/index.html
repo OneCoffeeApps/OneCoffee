@@ -73,7 +73,24 @@
         </div>
     </div>
 
+    
+    <!-- Custom QR Popup -->
+    <div id="custom-qr-popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);">
+        <div style="background:#1c1c1e; padding:30px 20px; border-radius:20px; text-align:center; width:85%; max-width:320px; border: 1px solid #333; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <img src="icon.png" style="width:70px; border-radius:16px; margin-bottom:20px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+            <h3 style="color:white; font-family:-apple-system, BlinkMacSystemFont, sans-serif; margin:0 0 25px 0; font-size:20px; font-weight:600; line-height:1.3;">¿Desea descargar OneCoffee mobile?</h3>
+            <button id="btn-qr-accept" style="background:#34c759; color:white; border:none; padding:14px 24px; border-radius:12px; font-size:17px; font-weight:bold; cursor:pointer; width:100%; font-family:-apple-system, BlinkMacSystemFont, sans-serif;">Aceptar</button>
+        </div>
+    </div>
+
     <script>
+
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+        
         const i18n = {
             en: { i_h2: "Install OneCoffee", i_p: "Tap Share and select 'Add to Home Screen'.", l_h2: "Link Device", l_p: "Scan the QR code from your Mac to access.", m_h2: "OneCoffee Apps", b15: "+ 15 Minutes", b60: "+ 1 Hour", b180: "+ 3 Hours", m_opts: "Options:", push: "Enable Alerts", adv: "Alert Time...", push_title: "Push Alerts", push_sub: "Enter minutes:", placeholder: "Enter only numbers", unlink: "Unlink Mac", s_on: "Mac Protected", s_off: "Inactive" },
             es: { i_h2: "Instalar OneCoffee", i_p: "Toca Compartir y selecciona 'Añadir a la pantalla de inicio'.", l_h2: "Vincular", l_p: "Escanea el código QR de tu Mac para acceder.", m_h2: "OneCoffee Apps", b15: "+ 15 Minutos", b60: "+ 1 Hora", b180: "+ 3 Horas", m_opts: "Opciones:", push: "Activar Alertas", adv: "Antelación...", push_title: "Alertas Push", push_sub: "Ingrese los minutos:", placeholder: "Ingresar solo números", unlink: "Desvincular Mac", s_on: "Mac Protegido", s_off: "Inactivo" },
@@ -103,43 +120,67 @@
             checkStatus(); 
         }
 
-        const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+        const isStandalone = window.navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+        const urlParams = new URLSearchParams(window.location.search);
+        const qrFromUrl = urlParams.get('qr');
+        
+        if (qrFromUrl) {
+            localStorage.setItem('pending_qr', qrFromUrl);
+        }
+        
+        const qr = qrFromUrl || localStorage.getItem('pending_qr');
+        const token = localStorage.getItem('oc_token');
+
         function showScreen(id) {
             document.querySelectorAll('.card').forEach(el => el.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
 
-        if (!isStandalone) {
-            changeLang(cLang); showScreen('install-screen');
-        } else {
-            const urlParams = new URLSearchParams(window.location.search);
-            const qr = urlParams.get('qr');
-            const token = localStorage.getItem('oc_token');
-            if (qr && !token) {
-                if (!confirm("¿Desea descargar OneCoffee mobile?")) {
-                    changeLang(cLang); showScreen('link-screen');
-                } else {
-                fetch('/api/link', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({qrToken: qr, deviceName: "iPhone " + navigator.userAgent.substring(0,10)})
-                }).then(r => r.json()).then(data => {
-                    if (data.status === 'success') {
-                        localStorage.setItem('oc_token', data.deviceToken);
-                        window.history.replaceState({}, document.title, "/");
-                        changeLang(cLang); showScreen('main-screen');
-                        setInterval(checkStatus, 5000);
-                    } else { alert("QR Expirado."); changeLang(cLang); showScreen('link-screen'); }
-                });
-                }
-            } else if (token) {
-                window.history.replaceState({}, document.title, "/");
-                changeLang(cLang); showScreen('main-screen');
-                if(i18n[cLang].push_title) { document.getElementById("p-h2").innerText = i18n[cLang].push_title; document.getElementById("p-p").innerText = i18n[cLang].push_sub; document.getElementById("push-input").placeholder = i18n[cLang].placeholder; }
-            checkStatus(); setInterval(checkStatus, 5000);
-            } else {
-                changeLang(cLang); showScreen('link-screen');
+        if (qrFromUrl && !token) {
+            // Escaneó QR. Mostrar popup interceptor.
+            const popup = document.getElementById('custom-qr-popup');
+            if(popup) popup.style.display = 'flex';
+            
+            const btn = document.getElementById('btn-qr-accept');
+            if(btn) {
+                btn.onclick = function() {
+                    popup.style.display = 'none';
+                    
+                    fetch('/api/link', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({qrToken: qrFromUrl, deviceName: "Mobile " + navigator.userAgent.substring(0,10)})
+                    }).then(r => r.json()).then(data => {
+                        if (data.status === 'success') {
+                            localStorage.setItem('oc_token', data.deviceToken);
+                            window.history.replaceState({}, document.title, "/");
+                            changeLang(cLang); 
+                            showScreen('main-screen');
+                            setInterval(checkStatus, 5000);
+                            if (window.deferredPrompt) {
+                                window.deferredPrompt.prompt();
+                                window.deferredPrompt.userChoice.then(() => { window.deferredPrompt = null; });
+                            }
+                        } else { 
+                            alert("QR Expirado o Inválido."); 
+                            changeLang(cLang); showScreen('link-screen'); 
+                        }
+                    }).catch(e => { console.log(e); });
+                };
             }
+        } else if (!isStandalone && !token) {
+            changeLang(cLang); showScreen('install-screen');
+        } else if (token) {
+            window.history.replaceState({}, document.title, "/");
+            changeLang(cLang); showScreen('main-screen');
+            if(i18n[cLang].push_title) { 
+                document.getElementById("p-h2").innerText = i18n[cLang].push_title; 
+                document.getElementById("p-p").innerText = i18n[cLang].push_sub; 
+                document.getElementById("push-input").placeholder = i18n[cLang].placeholder; 
+            }
+            checkStatus(); setInterval(checkStatus, 5000);
+        } else {
+            changeLang(cLang); showScreen('link-screen');
         }
 
         function checkStatus() {
