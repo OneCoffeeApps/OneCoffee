@@ -115,7 +115,7 @@
             const qr = urlParams.get('qr');
             const token = localStorage.getItem('oc_token');
             if (qr && !token) {
-                if (!confirm("Presiona aceptar para descargar la app de OneCoffee Mobile")) {
+                if (!confirm("¿Desea descargar OneCoffee mobile?")) {
                     changeLang(cLang); showScreen('link-screen');
                 } else {
                 fetch('/api/link', {
