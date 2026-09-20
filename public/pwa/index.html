@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OneCoffee Control</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #1c1c1e; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; padding: 20px; text-align: center; }
+        .hidden { display: none !important; }
+        .card { background: #2c2c2e; border-radius: 16px; padding: 24px; max-width: 320px; width: 100%; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .btn { background: #34c759; color: white; border: none; padding: 14px 24px; border-radius: 12px; font-size: 16px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; }
+        .btn-blue { background: #007aff; }
+        .btn-gray { background: #48484a; }
+        .btn-danger { background: #ff3b30; }
+        .icon { font-size: 64px; margin-bottom: 16px; }
+        h2 { margin-top: 0; font-size: 22px; }
+        p { color: #8e8e93; font-size: 14px; line-height: 1.4; }
+        .status { font-size: 18px; font-weight: bold; margin: 20px 0; color: #34c759; }
+        .lang-select { position: absolute; top: 10px; right: 10px; background: #3a3a3c; color: white; border: none; padding: 5px; border-radius: 5px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    </style>
+</head>
+<body>
+    <select class="lang-select" onchange="changeLang(this.value)">
+        <option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option>
+        <option value="fr">FR</option><option value="ru">RU</option><option value="zh">ZH</option>
+    </select>
+
+    <div id="install-screen" class="card hidden">
+        <div class="icon">☕️</div>
+        <h2 id="i-h2">Install OneCoffee</h2>
+        <p id="i-p">Tap Share and select 'Add to Home Screen'.</p>
+    </div>
+
+    <div id="link-screen" class="card hidden">
+        <div class="icon">🔗</div>
+        <h2 id="l-h2">Link Device</h2>
+        <p id="l-p">Scan the QR code from your Mac to access.</p>
+    </div>
+
+    <div id="main-screen" class="card hidden">
+        <div class="icon">☕️</div>
+        <h2 id="m-h2">Remote Control</h2>
+        <div class="status" id="status-text">Mac Protected</div>
+        
+        <button class="btn" onclick="addTime(15)" id="btn-15">+ 15 Minutes</button>
+        <button class="btn" onclick="addTime(60)" id="btn-60">+ 1 Hour</button>
+        <button class="btn" onclick="addTime(180)" id="btn-180">+ 3 Hours</button>
+        
+        <p style="margin-top: 20px;" id="m-opts">Options:</p>
+        
+        <div class="grid-2">
+            <button class="btn btn-blue" id="push-btn" onclick="enablePush()">Enable Alerts</button>
+            <button class="btn btn-gray" id="adv-btn" onclick="customAdvance()">Alert Time...</button>
+        </div>
+        
+        <button class="btn btn-danger" id="unlink-btn" onclick="unlinkDevice()">Unlink Mac</button>
+    </div>
+
+    
+    <div id="push-modal" class="card hidden">
+        <div class="icon">🔔</div>
+        <h2 id="p-h2">Alertas Push</h2>
+        <p id="p-p">Ingrese los minutos:</p>
+        <input type="number" id="push-input" placeholder="Ingresar solo números" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #3a3a3c; color: white; font-size: 16px; margin-top: 10px; margin-bottom: 20px; text-align: center;" min="1" step="1" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+        <div class="grid-2">
+            <button class="btn btn-blue" onclick="submitCustomAdvance()">OK</button>
+            <button class="btn btn-gray" onclick="showScreen('main-screen')">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        const i18n = {
+            en: { i_h2: "Install OneCoffee", i_p: "Tap Share and select 'Add to Home Screen'.", l_h2: "Link Device", l_p: "Scan the QR code from your Mac to access.", m_h2: "OneCoffee Apps", b15: "+ 15 Minutes", b60: "+ 1 Hour", b180: "+ 3 Hours", m_opts: "Options:", push: "Enable Alerts", adv: "Alert Time...", push_title: "Push Alerts", push_sub: "Enter minutes:", placeholder: "Enter only numbers", unlink: "Unlink Mac", s_on: "Mac Protected", s_off: "Inactive" },
+            es: { i_h2: "Instalar OneCoffee", i_p: "Toca Compartir y selecciona 'Añadir a la pantalla de inicio'.", l_h2: "Vincular", l_p: "Escanea el código QR de tu Mac para acceder.", m_h2: "OneCoffee Apps", b15: "+ 15 Minutos", b60: "+ 1 Hora", b180: "+ 3 Horas", m_opts: "Opciones:", push: "Activar Alertas", adv: "Antelación...", push_title: "Alertas Push", push_sub: "Ingrese los minutos:", placeholder: "Ingresar solo números", unlink: "Desvincular Mac", s_on: "Mac Protegido", s_off: "Inactivo" },
+            pt: { i_h2: "Instalar OneCoffee", i_p: "Toque em Compartilhar e selecione 'Adicionar à Tela de Início'.", l_h2: "Vincular", l_p: "Escaneie o código QR do seu Mac para acessar.", m_h2: "OneCoffee Apps", b15: "+ 15 Minutos", b60: "+ 1 Hora", b180: "+ 3 Horas", m_opts: "Opções:", push: "Ativar Alertas", adv: "Antecedência...", push_title: "Alertas Push", push_sub: "Insira os minutos:", placeholder: "Apenas números", unlink: "Desvincular Mac", s_on: "Mac Protegido", s_off: "Inativo" },
+            fr: { i_h2: "Installer OneCoffee", i_p: "Touchez Partager et 'Sur l'écran d'accueil'.", l_h2: "Associer", l_p: "Scannez le QR code de votre Mac.", m_h2: "OneCoffee Apps", b15: "+ 15 Minutes", b60: "+ 1 Heure", b180: "+ 3 Heures", m_opts: "Options:", push: "Activer les Alertes", adv: "Délai d'alerte...", push_title: "Alertes Push", push_sub: "Entrez les minutes :", placeholder: "Entrez des nombres", unlink: "Dissocier le Mac", s_on: "Mac Protégé", s_off: "Inactif" },
+            ru: { i_h2: "Установить OneCoffee", i_p: "Нажмите Поделиться и 'На экран Домой'.", l_h2: "Связать", l_p: "Отсканируйте QR-код с вашего Mac.", m_h2: "OneCoffee Apps", b15: "+ 15 Минут", b60: "+ 1 Час", b180: "+ 3 Часа", m_opts: "Опции:", push: "Включить Оповещения", adv: "Время упреждения...", push_title: "Push-уведомления", push_sub: "Введите минуты:", placeholder: "Только цифры", unlink: "Отвязать Mac", s_on: "Mac Защищен", s_off: "Неактивен" },
+            zh: { i_h2: "安装 OneCoffee", i_p: "点击分享并选择'添加到主屏幕'。", l_h2: "关联设备", l_p: "扫描Mac上的二维码以访问。", m_h2: "OneCoffee Apps", b15: "+ 15 分钟", b60: "+ 1 小时", b180: "+ 3 小时", m_opts: "选项：", push: "启用警报", adv: "警报时间...", push_title: "推送通知", push_sub: "输入分钟数：", placeholder: "仅输入数字", unlink: "取消关联 Mac", s_on: "Mac 受保护", s_off: "未激活" }
+        };
+        let cLang = localStorage.getItem('lang') || 'en';
+        document.querySelector('.lang-select').value = cLang;
+
+        function changeLang(lang) {
+            cLang = lang; localStorage.setItem('lang', lang);
+            document.getElementById('i-h2').innerText = i18n[lang].i_h2;
+            document.getElementById('i-p').innerText = i18n[lang].i_p;
+            document.getElementById('l-h2').innerText = i18n[lang].l_h2;
+            document.getElementById('l-p').innerText = i18n[lang].l_p;
+            document.getElementById('m-h2').innerText = i18n[lang].m_h2;
+            document.getElementById('btn-15').innerText = i18n[lang].b15;
+            document.getElementById('btn-60').innerText = i18n[lang].b60;
+            document.getElementById('btn-180').innerText = i18n[lang].b180;
+            document.getElementById('m-opts').innerText = i18n[lang].m_opts;
+            document.getElementById('push-btn').innerText = i18n[lang].push;
+            document.getElementById('adv-btn').innerText = i18n[lang].adv;
+            document.getElementById('unlink-btn').innerText = i18n[lang].unlink;
+            if(i18n[lang].push_title) { document.getElementById("p-h2").innerText = i18n[lang].push_title; document.getElementById("p-p").innerText = i18n[lang].push_sub; document.getElementById("push-input").placeholder = i18n[lang].placeholder; }
+            checkStatus(); 
+        }
+
+        const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+        function showScreen(id) {
+            document.querySelectorAll('.card').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        if (!isStandalone) {
+            changeLang(cLang); showScreen('install-screen');
+        } else {
+            const urlParams = new URLSearchParams(window.location.search);
+            const qr = urlParams.get('qr');
+            const token = localStorage.getItem('oc_token');
+            if (qr && !token) {
+                if (!confirm("Presiona aceptar para descargar la app de OneCoffee Mobile")) {
+                    changeLang(cLang); showScreen('link-screen');
+                    return;
+                }
+                fetch('/api/link', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({qrToken: qr, deviceName: "iPhone " + navigator.userAgent.substring(0,10)})
+                }).then(r => r.json()).then(data => {
+                    if (data.status === 'success') {
+                        localStorage.setItem('oc_token', data.deviceToken);
+                        window.history.replaceState({}, document.title, "/");
+                        changeLang(cLang); showScreen('main-screen');
+                        setInterval(checkStatus, 5000);
+                    } else { alert("QR Expirado."); changeLang(cLang); showScreen('link-screen'); }
+                });
+            } else if (token) {
+                window.history.replaceState({}, document.title, "/");
+                changeLang(cLang); showScreen('main-screen');
+                if(i18n[lang].push_title) { document.getElementById("p-h2").innerText = i18n[lang].push_title; document.getElementById("p-p").innerText = i18n[lang].push_sub; document.getElementById("push-input").placeholder = i18n[lang].placeholder; }
+            checkStatus(); setInterval(checkStatus, 5000);
+            } else {
+                changeLang(cLang); showScreen('link-screen');
+            }
+        }
+
+        function checkStatus() {
+            if (!localStorage.getItem('oc_token')) return;
+            fetch('/api/status', { headers: {'Authorization': localStorage.getItem('oc_token')} })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('status-text').innerText = data.active ? i18n[cLang].s_on : i18n[cLang].s_off;
+                document.getElementById('status-text').style.color = data.active ? "#34c759" : "#ff3b30";
+                if(data.advance) { document.getElementById('adv-btn').innerText = data.advance + " min"; }
+            });
+        }
+        function addTime(mins) {
+            fetch('/api/action', { method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('oc_token')}, body: JSON.stringify({action: 'add', minutes: mins}) }).then(()=>checkStatus());
+        }
+        function customAdvance() {
+            showScreen('push-modal');
+            document.getElementById('push-input').focus();
+        }
+        function submitCustomAdvance() {
+            let m = document.getElementById('push-input').value;
+            if (m && !isNaN(m) && parseInt(m) > 0) {
+                fetch('/api/action', { method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('oc_token')}, body: JSON.stringify({action: 'set_advance', minutes: parseInt(m)}) }).then(()=>{ checkStatus(); showScreen('main-screen'); });
+            }
+        }
+        function unlinkDevice() {
+            fetch('/api/action', { method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('oc_token')}, body: JSON.stringify({action: 'unlink'}) });
+            localStorage.removeItem('oc_token'); showScreen('link-screen');
+        }
+        async function enablePush() {
+            if (!('serviceWorker' in navigator)) return alert("No Push Support");
+            const reg = await navigator.serviceWorker.register('/sw.js');
+            if (await Notification.requestPermission() !== 'granted') return alert("Permission Denied");
+            const vapidRes = await fetch('/api/vapid', { headers: {'Authorization': localStorage.getItem('oc_token')} });
+            const vapidData = await vapidRes.json();
+            const padding = '='.repeat((4 - vapidData.publicKey.length % 4) % 4);
+            const base64 = (vapidData.publicKey + padding).replace(/\-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+            
+            const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: outputArray });
+            await fetch('/api/push/subscribe', { method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('oc_token')}, body: JSON.stringify(sub) });
+            alert(i18n[cLang].push + " OK!");
+        }
+    </script>
+</body>
+</html>

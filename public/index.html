@@ -98,11 +98,12 @@
         <!-- QR Code Section -->
         <div class="mt-16 glass rounded-2xl p-8 max-w-2xl w-full flex flex-col md:flex-row items-center justify-center gap-8 shadow-2xl relative overflow-hidden">
             <div class="flex-shrink-0 bg-white p-2 rounded-xl">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://onecoffee-landing.vercel.app" alt="PWA QR Code" class="w-32 h-32 rounded-lg">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://onecoffee-landing.vercel.app/pwa/" alt="PWA QR Code" class="w-32 h-32 rounded-lg">
             </div>
             <div class="text-left">
                 <h3 id="qr-title" class="text-2xl font-bold text-white mb-2">Instala la App en tu iPhone</h3>
-                <p id="qr-desc" class="text-gray-400 mb-4">Escanea este código directamente con la cámara de tu iPhone para abrir la Web App segura y añadirla a tu pantalla de inicio.</p>
+                <p id="qr-desc" class="text-gray-400 mb-2">a) Escanea este código QR para obtener la versión OneCoffee Mobile.</p>
+                <p id="qr-desc-b" class="text-gray-400 mb-4">b) Tras instalar OneCoffee en la MacBook, vincula tu dispositivo desde la opción "Vincular dispositivo" del menú.</p>
             </div>
         </div>
 
@@ -140,7 +141,7 @@
                 hero_sub: 'The most elegant menubar app to prevent your Mac from sleeping. Control it remotely from your iPhone with secure end-to-end PWA integration.',
                 dl_title: 'macOS Application',
                 dl_desc: 'Requires macOS 10.15 or later. Universal Binary.',
-                dl_btn: 'Download for Mac', qr_title: 'Install on your iPhone', qr_desc: 'Scan this code with your iPhone camera to open the secure Web App and add it to your home screen.',
+                dl_btn: 'Download for Mac', qr_title: 'Install on your iPhone', qr_desc: 'a) Scan this QR code to get the OneCoffee Mobile version.', qr_desc_b: 'b) After installing on MacBook, link your device from the "Link device" menu option.',
                 sec_note: 'Secure Cloudflare Tunnel',
                 ios_title: 'How to install on iOS',
                 i1_t: 'Scan the QR', i1_d: 'Open OneCoffee on your Mac, click \'About\' and scan the QR code with your iPhone camera.',
@@ -153,7 +154,7 @@
                 hero_sub: 'La aplicación de barra de menús más elegante. Contrólala de forma remota desde tu iPhone con integración PWA segura de extremo a extremo.',
                 dl_title: 'Aplicación para macOS',
                 dl_desc: 'Requiere macOS 10.15 o superior. Binario Universal.',
-                dl_btn: 'Descargar para Mac', qr_title: 'Instala la App en tu iPhone', qr_desc: 'Escanea este código con la cámara de tu iPhone para abrir la Web App segura y añadirla a tu pantalla de inicio.',
+                dl_btn: 'Descargar para Mac', qr_title: 'Instala la App en tu iPhone', qr_desc: 'a) Escanea este código QR para obtener la versión OneCoffee Mobile.', qr_desc_b: 'b) Tras instalar OneCoffee en la MacBook, vincula tu dispositivo desde la opción "Vincular dispositivo" del menú.',
                 sec_note: 'Túnel Seguro de Cloudflare',
                 ios_title: 'Cómo instalar en iOS',
                 i1_t: 'Escanea el QR', i1_d: 'Abre OneCoffee en tu Mac, haz clic en "Acerca de" y escanea el código QR con tu iPhone.',
@@ -166,7 +167,7 @@
                 hero_sub: 'O aplicativo de barra de menus mais elegante. Controle remotamente do seu iPhone com integração PWA segura.',
                 dl_title: 'Aplicativo macOS',
                 dl_desc: 'Requer macOS 10.15 ou superior. Binário Universal.',
-                dl_btn: 'Baixar para Mac', qr_title: 'Instale no seu iPhone', qr_desc: 'Escaneie este código com a câmera do seu iPhone para abrir o Web App seguro.',
+                dl_btn: 'Baixar para Mac', qr_title: 'Instale no seu iPhone', qr_desc: 'a) Escaneie este código QR para obter a versão Mobile.', qr_desc_b: 'b) Após instalar no MacBook, vincule seu dispositivo na opção "Vincular dispositivo".',
                 sec_note: 'Túnel Seguro Cloudflare',
                 ios_title: 'Como instalar no iOS',
                 i1_t: 'Escaneie o QR', i1_d: 'Abra o OneCoffee no Mac, clique em "Sobre" e escaneie o código QR com o iPhone.',
@@ -179,7 +180,7 @@
                 hero_sub: 'L\'application de barre de menus la plus élégante. Contrôlez-la à distance depuis votre iPhone (PWA sécurisée).',
                 dl_title: 'Application macOS',
                 dl_desc: 'Nécessite macOS 10.15 ou plus. Binaire Universel.',
-                dl_btn: 'Télécharger pour Mac', qr_title: 'Installer sur iPhone', qr_desc: 'Scannez ce code avec votre caméra iPhone pour ouvrir l\'application web sécurisée.',
+                dl_btn: 'Télécharger pour Mac', qr_title: 'Installer sur iPhone', qr_desc: 'a) Scannez ce code QR pour obtenir la version Mobile.', qr_desc_b: 'b) Après l\'installation sur Mac, liez depuis l\'option "Lier l\'appareil".',
                 sec_note: 'Tunnel Sécurisé Cloudflare',
                 ios_title: 'Comment installer sur iOS',
                 i1_t: 'Scanner le QR', i1_d: 'Ouvrez OneCoffee sur Mac, cliquez sur "À propos" et scannez le code QR.',
@@ -192,7 +193,7 @@
                 hero_sub: 'Самое элегантное приложение для строки меню. Управляйте им удаленно с iPhone через безопасное PWA.',
                 dl_title: 'Приложение macOS',
                 dl_desc: 'Требуется macOS 10.15 и выше. Universal Binary.',
-                dl_btn: 'Скачать для Mac', qr_title: 'Установить на iPhone', qr_desc: 'Отсканируйте этот код камерой iPhone, чтобы открыть безопасное Web App.',
+                dl_btn: 'Скачать для Mac', qr_title: 'Установить на iPhone', qr_desc: 'a) Отсканируйте этот QR, чтобы получить версию Mobile.', qr_desc_b: 'b) После установки на Mac привяжите устройство через опцию "Привязать устройство".',
                 sec_note: 'Безопасный туннель Cloudflare',
                 ios_title: 'Как установить на iOS',
                 i1_t: 'Сканируйте QR', i1_d: 'Откройте OneCoffee на Mac, нажмите "О программе" и отсканируйте QR-код.',
@@ -205,7 +206,7 @@
                 hero_sub: '最优雅的菜单栏应用。通过安全的PWA从iPhone远程控制。',
                 dl_title: 'macOS 应用程序',
                 dl_desc: '需要 macOS 10.15 或更高版本。',
-                dl_btn: '下载 Mac 版', qr_title: '在 iPhone 上安装', qr_desc: '用 iPhone 相机扫描此代码以打开安全的网络应用程序。',
+                dl_btn: '下载 Mac 版', qr_title: '在 iPhone 上安装', qr_desc: 'a) 扫描此二维码以获取移动版。', qr_desc_b: 'b) 在Mac安装后，通过菜单的“关联设备”选项关联。',
                 sec_note: '安全的 Cloudflare 隧道',
                 ios_title: '如何在 iOS 上安装',
                 i1_t: '扫描二维码', i1_d: '在Mac上打开OneCoffee，点击“关于”，然后用iPhone扫描二维码。',
@@ -226,7 +227,7 @@
             document.getElementById('hero-subtitle').innerText = dict.hero_sub;
             document.getElementById('download-title').innerText = dict.dl_title;
             document.getElementById('download-desc').innerText = dict.dl_desc;
-            document.getElementById('download-btn').innerText = dict.dl_btn; document.getElementById('qr-title').innerText = dict.qr_title; document.getElementById('qr-desc').innerText = dict.qr_desc;
+            document.getElementById('download-btn').innerText = dict.dl_btn; document.getElementById('qr-title').innerText = dict.qr_title; document.getElementById('qr-desc').innerText = dict.qr_desc; document.getElementById('qr-desc-b').innerText = dict.qr_desc_b;
             
             document.getElementById('security-note').innerHTML = `<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg> ${dict.sec_note}`;
             
