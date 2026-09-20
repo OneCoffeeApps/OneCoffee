@@ -98,7 +98,7 @@
             document.getElementById('push-btn').innerText = i18n[lang].push;
             document.getElementById('adv-btn').innerText = i18n[lang].adv;
             document.getElementById('unlink-btn').innerText = i18n[lang].unlink;
-            if(i18n[lang].push_title) { document.getElementById("p-h2").innerText = i18n[lang].push_title; document.getElementById("p-p").innerText = i18n[lang].push_sub; document.getElementById("push-input").placeholder = i18n[lang].placeholder; }
+            if(i18n[cLang].push_title) { document.getElementById("p-h2").innerText = i18n[cLang].push_title; document.getElementById("p-p").innerText = i18n[cLang].push_sub; document.getElementById("push-input").placeholder = i18n[cLang].placeholder; }
             checkStatus(); 
         }
 
@@ -117,8 +117,7 @@
             if (qr && !token) {
                 if (!confirm("Presiona aceptar para descargar la app de OneCoffee Mobile")) {
                     changeLang(cLang); showScreen('link-screen');
-                    return;
-                }
+                } else {
                 fetch('/api/link', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -131,10 +130,11 @@
                         setInterval(checkStatus, 5000);
                     } else { alert("QR Expirado."); changeLang(cLang); showScreen('link-screen'); }
                 });
+                }
             } else if (token) {
                 window.history.replaceState({}, document.title, "/");
                 changeLang(cLang); showScreen('main-screen');
-                if(i18n[lang].push_title) { document.getElementById("p-h2").innerText = i18n[lang].push_title; document.getElementById("p-p").innerText = i18n[lang].push_sub; document.getElementById("push-input").placeholder = i18n[lang].placeholder; }
+                if(i18n[cLang].push_title) { document.getElementById("p-h2").innerText = i18n[cLang].push_title; document.getElementById("p-p").innerText = i18n[cLang].push_sub; document.getElementById("push-input").placeholder = i18n[cLang].placeholder; }
             checkStatus(); setInterval(checkStatus, 5000);
             } else {
                 changeLang(cLang); showScreen('link-screen');
