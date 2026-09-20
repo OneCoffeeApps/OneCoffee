@@ -3,66 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OneCoffee - Keep your Mac awake</title>
+    <title>OneCoffee Apps</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0D0D11',
+                        brand: '#1c9842',
+                        brandGlow: 'rgba(28, 152, 66, 0.4)',
+                        coffee: '#6F4E37',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: -apple-system, system-ui, sans-serif; background: #1c1c1e; color: #fff; text-align: center; padding: 50px 20px; }
-        .container { max-width: 600px; margin: auto; }
-        .hero-icon { font-size: 80px; margin-bottom: 20px; }
-        h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        p { font-size: 1.2rem; color: #8e8e93; line-height: 1.5; margin-bottom: 40px; }
-        .btn { background: #34c759; color: white; padding: 15px 30px; font-size: 1.2rem; border-radius: 12px; text-decoration: none; font-weight: bold; display: inline-block; }
-        .btn:hover { background: #2ebd4d; }
-        .guide { margin-top: 50px; background: #2c2c2e; padding: 25px; border-radius: 16px; text-align: left; }
-        .lang-select { position: absolute; top: 20px; right: 20px; padding: 8px; border-radius: 8px; background: #2c2c2e; color: white; border: 1px solid #444; }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glow-bg {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--tw-colors-brandGlow) 0%, rgba(13,13,17,0) 70%);
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            filter: blur(50px);
+        }
     </style>
 </head>
-<body>
-    <select class="lang-select" onchange="changeLang(this.value)">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="pt">Português</option>
-        <option value="fr">Français</option>
-        <option value="ru">Русский</option>
-        <option value="zh">中文</option>
-    </select>
+<body class="bg-dark text-gray-300 font-sans antialiased relative min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Ambient Glow -->
+    <div class="glow-bg"></div>
 
-    <div class="container">
-        <div class="hero-icon">☕️</div>
-        <h1 id="title">OneCoffee for macOS</h1>
-        <p id="desc">Keep your Mac awake seamlessly. Control it remotely from your iPhone with real-time Push Notifications.</p>
-        <a href="downloads/OneCoffee.dmg" class="btn" id="download-btn">Download for macOS</a>
-        
-        <div class="guide">
-            <h2 id="guide-title">How to install the iOS PWA</h2>
-            <ol>
-                <li id="step1">Download and install OneCoffee on your Mac.</li>
-                <li id="step2">Open the app and scan the QR code with your iPhone.</li>
-                <li id="step3">In Safari, tap the <b>Share</b> button and select <b>"Add to Home Screen"</b>.</li>
-                <li id="step4">Open the newly added app on your iPhone and enable Push Alerts!</li>
-            </ol>
+    <!-- Nav -->
+    <nav class="w-full flex justify-between items-center p-6 max-w-5xl mx-auto z-10">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand to-green-700 flex items-center justify-center text-white text-xl shadow-[0_0_15px_rgba(28,152,66,0.5)]">
+                ☕️
+            </div>
+            <span class="text-white font-bold text-xl tracking-tight">OneCoffee</span>
         </div>
-    </div>
+        <div>
+            <select id="lang-select" onchange="changeLang(this.value)" class="glass text-gray-300 text-sm py-2 px-3 rounded-lg outline-none cursor-pointer focus:border-brand transition-colors">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="pt">Português</option>
+                <option value="fr">Français</option>
+                <option value="ru">Русский</option>
+                <option value="zh">中文</option>
+            </select>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center justify-center px-6 z-10 w-full max-w-5xl mx-auto text-center mt-12 mb-20">
+        <h1 id="hero-title" class="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-tight mb-6">
+            Keep your Mac <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-green-400">awake</span> seamlessly.
+        </h1>
+        <p id="hero-subtitle" class="text-lg md:text-xl text-gray-400 max-w-2xl mb-12">
+            The most elegant menubar app to prevent your Mac from sleeping. Control it remotely from your iPhone with secure end-to-end PWA integration.
+        </p>
+
+        <!-- Download Section -->
+        <div class="glass rounded-2xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden group">
+            <div class="absolute inset-0 bg-brand/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <h2 id="download-title" class="text-2xl font-semibold text-white mb-2">macOS Application</h2>
+            <p id="download-desc" class="text-sm text-gray-400 mb-6">Requires macOS 10.15 or later. Universal Binary.</p>
+            
+            <a href="downloads/OneCoffee.dmg" download="OneCoffee.dmg" class="inline-flex w-full items-center justify-center space-x-2 bg-brand hover:bg-green-600 text-white font-medium py-3 px-6 rounded-xl shadow-[0_0_20px_rgba(28,152,66,0.3)] hover:shadow-[0_0_30px_rgba(28,152,66,0.6)] transition-all duration-300 transform hover:-translate-y-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span id="download-btn">Download for Mac</span>
+            </a>
+            <p id="security-note" class="text-xs text-gray-500 mt-4 flex items-center justify-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                Secure Cloudflare Tunnel
+            </p>
+        </div>
+
+        <!-- iOS PWA Guide -->
+        <div class="mt-24 w-full text-left">
+            <h3 id="ios-title" class="text-2xl font-semibold text-white mb-8 text-center">How to install on iOS</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass rounded-2xl p-6 relative">
+                    <div class="absolute -top-4 -left-4 w-8 h-8 rounded-full bg-dark border border-gray-700 flex items-center justify-center text-brand font-bold">1</div>
+                    <h4 id="ios-step1-title" class="text-white font-medium mb-2">Scan the QR</h4>
+                    <p id="ios-step1-desc" class="text-sm text-gray-400">Open OneCoffee on your Mac, click 'About' and scan the QR code with your iPhone camera.</p>
+                </div>
+                <div class="glass rounded-2xl p-6 relative">
+                    <div class="absolute -top-4 -left-4 w-8 h-8 rounded-full bg-dark border border-gray-700 flex items-center justify-center text-brand font-bold">2</div>
+                    <h4 id="ios-step2-title" class="text-white font-medium mb-2">Tap Share</h4>
+                    <p id="ios-step2-desc" class="text-sm text-gray-400">When Safari opens, tap the Share icon [↑] at the bottom of the screen.</p>
+                </div>
+                <div class="glass rounded-2xl p-6 relative">
+                    <div class="absolute -top-4 -left-4 w-8 h-8 rounded-full bg-dark border border-gray-700 flex items-center justify-center text-brand font-bold">3</div>
+                    <h4 id="ios-step3-title" class="text-white font-medium mb-2">Add to Home Screen</h4>
+                    <p id="ios-step3-desc" class="text-sm text-gray-400">Select "Add to Home Screen" to install the App and enable Push Notifications.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full text-center py-6 text-xs text-gray-600 z-10 border-t border-white/5">
+        &copy; 2026 OneCoffee Apps. <span id="footer-text">Built for security and efficiency.</span>
+    </footer>
 
     <script>
         const i18n = {
-            en: { title: "OneCoffee for macOS", desc: "Keep your Mac awake seamlessly. Control it remotely from your iPhone with real-time Push Notifications.", download: "Download for macOS", gTitle: "How to install the iOS PWA", s1: "Download and install OneCoffee on your Mac.", s2: "Open the app and scan the QR code with your iPhone.", s3: "In Safari, tap the Share button and select 'Add to Home Screen'.", s4: "Open the newly added app on your iPhone and enable Push Alerts!" },
-            es: { title: "OneCoffee para macOS", desc: "Mantén tu Mac despierto sin problemas. Contrólalo de forma remota desde tu iPhone con notificaciones push en tiempo real.", download: "Descargar para macOS", gTitle: "Cómo instalar la PWA en iOS", s1: "Descarga e instala OneCoffee en tu Mac.", s2: "Abre la app y escanea el código QR con tu iPhone.", s3: "En Safari, toca el botón Compartir y selecciona 'Añadir a la pantalla de inicio'.", s4: "¡Abre la nueva app en tu iPhone y activa las Alertas Push!" },
-            pt: { title: "OneCoffee para macOS", desc: "Mantenha o seu Mac acordado sem problemas. Controle-o remotamente a partir do seu iPhone com notificações Push em tempo real.", download: "Baixar para macOS", gTitle: "Como instalar o PWA no iOS", s1: "Baixe e instale o OneCoffee no seu Mac.", s2: "Abra o aplicativo e leia o código QR com o seu iPhone.", s3: "No Safari, toque no botão Compartilhar e selecione 'Adicionar à Tela de Início'.", s4: "Abra o novo aplicativo no seu iPhone e ative os Alertas Push!" },
-            fr: { title: "OneCoffee pour macOS", desc: "Empêchez votre Mac de s'endormir. Contrôlez-le à distance depuis votre iPhone avec des notifications Push en temps réel.", download: "Télécharger pour macOS", gTitle: "Comment installer la PWA iOS", s1: "Téléchargez et installez OneCoffee sur votre Mac.", s2: "Ouvrez l'application et scannez le code QR avec votre iPhone.", s3: "Dans Safari, touchez le bouton Partager et sélectionnez 'Sur l'écran d'accueil'.", s4: "Ouvrez la nouvelle application sur votre iPhone et activez les alertes Push !" },
-            ru: { title: "OneCoffee для macOS", desc: "Держите ваш Mac в активном состоянии. Управляйте им удаленно с вашего iPhone с помощью Push-уведомлений.", download: "Скачать для macOS", gTitle: "Как установить PWA на iOS", s1: "Скачайте и установите OneCoffee на свой Mac.", s2: "Откройте приложение и отсканируйте QR-код с помощью iPhone.", s3: "В Safari нажмите кнопку «Поделиться» и выберите «На экран «Домой».", s4: "Откройте новое приложение на iPhone и включите Push-уведомления!" },
-            zh: { title: "macOS版 OneCoffee", desc: "无缝保持Mac唤醒。通过实时推送通知从iPhone远程控制它。", download: "下载 macOS 版", gTitle: "如何在iOS安装PWA", s1: "在Mac上下载并安装OneCoffee。", s2: "打开应用并用iPhone扫描二维码。", s3: "在Safari中，点击分享按钮并选择“添加到主屏幕”。", s4: "在iPhone上打开新应用并启用推送提醒！" }
+            en: {
+                hero_title: 'Keep your Mac <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-green-400">awake</span> seamlessly.',
+                hero_sub: 'The most elegant menubar app to prevent your Mac from sleeping. Control it remotely from your iPhone with secure end-to-end PWA integration.',
+                dl_title: 'macOS Application',
+                dl_desc: 'Requires macOS 10.15 or later. Universal Binary.',
+                dl_btn: 'Download for Mac',
+                sec_note: 'Secure Cloudflare Tunnel',
+                ios_title: 'How to install on iOS',
+                i1_t: 'Scan the QR', i1_d: 'Open OneCoffee on your Mac, click \'About\' and scan the QR code with your iPhone camera.',
+                i2_t: 'Tap Share', i2_d: 'When Safari opens, tap the Share icon [↑] at the bottom of the screen.',
+                i3_t: 'Add to Home Screen', i3_d: 'Select "Add to Home Screen" to install the App and enable Push Notifications.',
+                footer: 'Built for security and efficiency.'
+            },
+            es: {
+                hero_title: 'Mantén tu Mac <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-green-400">despierto</span> sin interrupciones.',
+                hero_sub: 'La aplicación de barra de menús más elegante. Contrólala de forma remota desde tu iPhone con integración PWA segura de extremo a extremo.',
+                dl_title: 'Aplicación para macOS',
+                dl_desc: 'Requiere macOS 10.15 o superior. Binario Universal.',
+                dl_btn: 'Descargar para Mac',
+                sec_note: 'Túnel Seguro de Cloudflare',
+                ios_title: 'Cómo instalar en iOS',
+                i1_t: 'Escanea el QR', i1_d: 'Abre OneCoffee en tu Mac, haz clic en "Acerca de" y escanea el código QR con tu iPhone.',
+                i2_t: 'Toca Compartir', i2_d: 'Cuando se abra Safari, toca el ícono de Compartir [↑] en la parte inferior.',
+                i3_t: 'Añadir a Inicio', i3_d: 'Selecciona "Añadir a la pantalla de inicio" para instalar la App y recibir alertas Push.',
+                footer: 'Construido para seguridad y eficiencia.'
+            },
+            pt: {
+                hero_title: 'Mantenha seu Mac <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-green-400">acordado</span> perfeitamente.',
+                hero_sub: 'O aplicativo de barra de menus mais elegante. Controle remotamente do seu iPhone com integração PWA segura.',
+                dl_title: 'Aplicativo macOS',
+                dl_desc: 'Requer macOS 10.15 ou superior. Binário Universal.',
+                dl_btn: 'Baixar para Mac',
+                sec_note: 'Túnel Seguro Cloudflare',
+                ios_title: 'Como instalar no iOS',
+                i1_t: 'Escaneie o QR', i1_d: 'Abra o OneCoffee no Mac, clique em "Sobre" e escaneie o código QR com o iPhone.',
+                i2_t: 'Toque em Compartilhar', i2_d: 'No Safari, toque no ícone de Compartilhar [↑] na parte inferior.',
+                i3_t: 'Adicionar à Tela', i3_d: 'Selecione "Adicionar à Tela de Início" para instalar o App e ativar notificações.',
+                footer: 'Criado para segurança e eficiência.'
+            },
+            fr: {
+                hero_title: 'Gardez votre Mac <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-green-400">éveillé</span> facilement.',
+                hero_sub: 'L\'application de barre de menus la plus élégante. Contrôlez-la à distance depuis votre iPhone (PWA sécurisée).',
+                dl_title: 'Application macOS',
+                dl_desc: 'Nécessite macOS 10.15 ou plus. Binaire Universel.',
+                dl_btn: 'Télécharger pour Mac',
+                sec_note: 'Tunnel Sécurisé Cloudflare',
+                ios_title: 'Comment installer sur iOS',
+                i1_t: 'Scanner le QR', i1_d: 'Ouvrez OneCoffee sur Mac, cliquez sur "À propos" et scannez le code QR.',
+                i2_t: 'Touchez Partager', i2_d: 'Dans Safari, touchez l\'icône Partager [↑] en bas.',
+                i3_t: 'Sur l\'écran d\'accueil', i3_d: 'Sélectionnez "Sur l\'écran d\'accueil" pour installer et activer les alertes.',
+                footer: 'Conçu pour la sécurité et l\'efficacité.'
+            },
+            ru: {
+                hero_title: 'Держите ваш Mac <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-green-400">бодрствующим</span> легко.',
+                hero_sub: 'Самое элегантное приложение для строки меню. Управляйте им удаленно с iPhone через безопасное PWA.',
+                dl_title: 'Приложение macOS',
+                dl_desc: 'Требуется macOS 10.15 и выше. Universal Binary.',
+                dl_btn: 'Скачать для Mac',
+                sec_note: 'Безопасный туннель Cloudflare',
+                ios_title: 'Как установить на iOS',
+                i1_t: 'Сканируйте QR', i1_d: 'Откройте OneCoffee на Mac, нажмите "О программе" и отсканируйте QR-код.',
+                i2_t: 'Нажмите Поделиться', i2_d: 'В Safari нажмите значок Поделиться [↑] внизу.',
+                i3_t: 'На экран Домой', i3_d: 'Выберите "На экран Домой", чтобы установить приложение и включить Push.',
+                footer: 'Создано для безопасности и эффективности.'
+            },
+            zh: {
+                hero_title: '让您的 Mac <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-green-400">保持唤醒</span> 无缝连接。',
+                hero_sub: '最优雅的菜单栏应用。通过安全的PWA从iPhone远程控制。',
+                dl_title: 'macOS 应用程序',
+                dl_desc: '需要 macOS 10.15 或更高版本。',
+                dl_btn: '下载 Mac 版',
+                sec_note: '安全的 Cloudflare 隧道',
+                ios_title: '如何在 iOS 上安装',
+                i1_t: '扫描二维码', i1_d: '在Mac上打开OneCoffee，点击“关于”，然后用iPhone扫描二维码。',
+                i2_t: '点击分享', i2_d: '在Safari中，点击屏幕底部的分享图标 [↑]。',
+                i3_t: '添加到主屏幕', i3_d: '选择“添加到主屏幕”以安装应用并启用推送通知。',
+                footer: '为安全和效率而构建。'
+            }
         };
 
+        const userLang = (navigator.language || navigator.userLanguage).substring(0,2);
+        let currentLang = i18n[userLang] ? userLang : 'en';
+        document.getElementById('lang-select').value = currentLang;
+
         function changeLang(lang) {
-            document.getElementById('title').innerText = i18n[lang].title;
-            document.getElementById('desc').innerText = i18n[lang].desc;
-            document.getElementById('download-btn').innerText = i18n[lang].download;
-            document.getElementById('guide-title').innerText = i18n[lang].gTitle;
-            document.getElementById('step1').innerText = i18n[lang].s1;
-            document.getElementById('step2').innerText = i18n[lang].s2;
-            document.getElementById('step3').innerText = i18n[lang].s3;
-            document.getElementById('step4').innerText = i18n[lang].s4;
+            currentLang = lang;
+            const dict = i18n[lang];
+            document.getElementById('hero-title').innerHTML = dict.hero_title;
+            document.getElementById('hero-subtitle').innerText = dict.hero_sub;
+            document.getElementById('download-title').innerText = dict.dl_title;
+            document.getElementById('download-desc').innerText = dict.dl_desc;
+            document.getElementById('download-btn').innerText = dict.dl_btn;
+            
+            document.getElementById('security-note').innerHTML = `<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg> ${dict.sec_note}`;
+            
+            document.getElementById('ios-title').innerText = dict.ios_title;
+            document.getElementById('ios-step1-title').innerText = dict.i1_t;
+            document.getElementById('ios-step1-desc').innerText = dict.i1_d;
+            document.getElementById('ios-step2-title').innerText = dict.i2_t;
+            document.getElementById('ios-step2-desc').innerText = dict.i2_d;
+            document.getElementById('ios-step3-title').innerText = dict.i3_t;
+            document.getElementById('ios-step3-desc').innerText = dict.i3_d;
+            document.getElementById('footer-text').innerText = dict.footer;
         }
+        
+        changeLang(currentLang);
     </script>
 </body>
 </html>
