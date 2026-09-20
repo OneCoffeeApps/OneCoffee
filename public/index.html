@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneCoffee - Keep your Mac awake</title>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; background: #1c1c1e; color: #fff; text-align: center; padding: 50px 20px; }
+        .container { max-width: 600px; margin: auto; }
+        .hero-icon { font-size: 80px; margin-bottom: 20px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        p { font-size: 1.2rem; color: #8e8e93; line-height: 1.5; margin-bottom: 40px; }
+        .btn { background: #34c759; color: white; padding: 15px 30px; font-size: 1.2rem; border-radius: 12px; text-decoration: none; font-weight: bold; display: inline-block; }
+        .btn:hover { background: #2ebd4d; }
+        .guide { margin-top: 50px; background: #2c2c2e; padding: 25px; border-radius: 16px; text-align: left; }
+        .lang-select { position: absolute; top: 20px; right: 20px; padding: 8px; border-radius: 8px; background: #2c2c2e; color: white; border: 1px solid #444; }
+    </style>
+</head>
+<body>
+    <select class="lang-select" onchange="changeLang(this.value)">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="pt">Português</option>
+        <option value="fr">Français</option>
+        <option value="ru">Русский</option>
+        <option value="zh">中文</option>
+    </select>
+
+    <div class="container">
+        <div class="hero-icon">☕️</div>
+        <h1 id="title">OneCoffee for macOS</h1>
+        <p id="desc">Keep your Mac awake seamlessly. Control it remotely from your iPhone with real-time Push Notifications.</p>
+        <a href="downloads/OneCoffee.dmg" class="btn" id="download-btn">Download for macOS</a>
+        
+        <div class="guide">
+            <h2 id="guide-title">How to install the iOS PWA</h2>
+            <ol>
+                <li id="step1">Download and install OneCoffee on your Mac.</li>
+                <li id="step2">Open the app and scan the QR code with your iPhone.</li>
+                <li id="step3">In Safari, tap the <b>Share</b> button and select <b>"Add to Home Screen"</b>.</li>
+                <li id="step4">Open the newly added app on your iPhone and enable Push Alerts!</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const i18n = {
+            en: { title: "OneCoffee for macOS", desc: "Keep your Mac awake seamlessly. Control it remotely from your iPhone with real-time Push Notifications.", download: "Download for macOS", gTitle: "How to install the iOS PWA", s1: "Download and install OneCoffee on your Mac.", s2: "Open the app and scan the QR code with your iPhone.", s3: "In Safari, tap the Share button and select 'Add to Home Screen'.", s4: "Open the newly added app on your iPhone and enable Push Alerts!" },
+            es: { title: "OneCoffee para macOS", desc: "Mantén tu Mac despierto sin problemas. Contrólalo de forma remota desde tu iPhone con notificaciones push en tiempo real.", download: "Descargar para macOS", gTitle: "Cómo instalar la PWA en iOS", s1: "Descarga e instala OneCoffee en tu Mac.", s2: "Abre la app y escanea el código QR con tu iPhone.", s3: "En Safari, toca el botón Compartir y selecciona 'Añadir a la pantalla de inicio'.", s4: "¡Abre la nueva app en tu iPhone y activa las Alertas Push!" },
+            pt: { title: "OneCoffee para macOS", desc: "Mantenha o seu Mac acordado sem problemas. Controle-o remotamente a partir do seu iPhone com notificações Push em tempo real.", download: "Baixar para macOS", gTitle: "Como instalar o PWA no iOS", s1: "Baixe e instale o OneCoffee no seu Mac.", s2: "Abra o aplicativo e leia o código QR com o seu iPhone.", s3: "No Safari, toque no botão Compartilhar e selecione 'Adicionar à Tela de Início'.", s4: "Abra o novo aplicativo no seu iPhone e ative os Alertas Push!" },
+            fr: { title: "OneCoffee pour macOS", desc: "Empêchez votre Mac de s'endormir. Contrôlez-le à distance depuis votre iPhone avec des notifications Push en temps réel.", download: "Télécharger pour macOS", gTitle: "Comment installer la PWA iOS", s1: "Téléchargez et installez OneCoffee sur votre Mac.", s2: "Ouvrez l'application et scannez le code QR avec votre iPhone.", s3: "Dans Safari, touchez le bouton Partager et sélectionnez 'Sur l'écran d'accueil'.", s4: "Ouvrez la nouvelle application sur votre iPhone et activez les alertes Push !" },
+            ru: { title: "OneCoffee для macOS", desc: "Держите ваш Mac в активном состоянии. Управляйте им удаленно с вашего iPhone с помощью Push-уведомлений.", download: "Скачать для macOS", gTitle: "Как установить PWA на iOS", s1: "Скачайте и установите OneCoffee на свой Mac.", s2: "Откройте приложение и отсканируйте QR-код с помощью iPhone.", s3: "В Safari нажмите кнопку «Поделиться» и выберите «На экран «Домой».", s4: "Откройте новое приложение на iPhone и включите Push-уведомления!" },
+            zh: { title: "macOS版 OneCoffee", desc: "无缝保持Mac唤醒。通过实时推送通知从iPhone远程控制它。", download: "下载 macOS 版", gTitle: "如何在iOS安装PWA", s1: "在Mac上下载并安装OneCoffee。", s2: "打开应用并用iPhone扫描二维码。", s3: "在Safari中，点击分享按钮并选择“添加到主屏幕”。", s4: "在iPhone上打开新应用并启用推送提醒！" }
+        };
+
+        function changeLang(lang) {
+            document.getElementById('title').innerText = i18n[lang].title;
+            document.getElementById('desc').innerText = i18n[lang].desc;
+            document.getElementById('download-btn').innerText = i18n[lang].download;
+            document.getElementById('guide-title').innerText = i18n[lang].gTitle;
+            document.getElementById('step1').innerText = i18n[lang].s1;
+            document.getElementById('step2').innerText = i18n[lang].s2;
+            document.getElementById('step3').innerText = i18n[lang].s3;
+            document.getElementById('step4').innerText = i18n[lang].s4;
+        }
+    </script>
+</body>
+</html>
